@@ -1,21 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // api
-import getWordFromApi from '../services/api';
+import getWordFromApi from "../services/api";
 
-import Header from '../components/Header/Header.js';
-import Dummy from '../components/Dummy/Dummy.js';
+import Header from "../components/Header/Header.js";
+import Dummy from "../components/Dummy/Dummy.js";
+import SolutionLetters from "./SolutionLetters/SolutionLetters";
+import ErrorLetters from "./ErrorLetters/ErrorLetters";
+
 // styles
-import '../styles/App.scss';
-import '../styles/Dummy.scss';
-import '../styles/Letters.scss';
-import '../styles/Form.scss';
-import '../styles/Header.scss';
+import "../styles/App.scss";
+import "../styles/Dummy.scss";
+import "../styles/Letters.scss";
+import "../styles/Form.scss";
+import "../styles/Header.scss";
 
 function App() {
-  const [word, setWord] = useState('');
+  const [word, setWord] = useState("");
   const [userLetters, setUserLetters] = useState([]);
-  const [lastLetter, setLastLetter] = useState('');
+  const [lastLetter, setLastLetter] = useState("");
 
   useEffect(() => {
     getWordFromApi().then((word) => {
@@ -31,8 +34,8 @@ function App() {
   };
 
   const handleChange = (ev) => {
-    let re = /^[a-zA-ZñÑá-úÁ-Ú´]$/; //add regular pattern 
-    if (re.test(ev.target.value) || ev.target.value === '') {
+    let re = /^[a-zA-ZñÑá-úÁ-Ú´]$/; //add regular pattern
+    if (re.test(ev.target.value) || ev.target.value === "") {
       handleLastLetter(ev.target.value);
     }
   };
@@ -48,18 +51,6 @@ function App() {
     return errorLetters.length;
   };
 
-  const renderSolutionLetters = () => {
-    const wordLetters = word.split('');
-    return wordLetters.map((letter, index) => {
-      const exists = userLetters.includes(letter.toLocaleLowerCase());
-      return (
-        <li key={index} className='letter'>
-          {exists ? letter : ''}
-        </li>
-      );
-    });
-  };
-
   const renderErrorLetters = () => {
     const errorLetters = userLetters.filter(
       (letter) =>
@@ -67,7 +58,7 @@ function App() {
     );
     return errorLetters.map((letter, index) => {
       return (
-        <li key={index} className='letter'>
+        <li key={index} className="letter">
           {letter}
         </li>
       );
@@ -85,39 +76,32 @@ function App() {
   };
 
   return (
-    <div className='page'>
+    <div className="page">
       <Header></Header>
-      <main className='main'>
+      <main className="main">
         <section>
-          <div className='solution'>
-            <h2 className='title'>Solución:</h2>
-            <ul className='letters'>{renderSolutionLetters()}</ul>
-          </div>
-          <div className='error'>
-            <h2 className='title'>Letras falladas:</h2>
-            <ul className='letters'>{renderErrorLetters()}</ul>
-          </div>
-          <form className='form' onSubmit={handleSubmit}>
-            <label className='title' htmlFor='last-letter'>
+          <SolutionLetters wordLetters={word} userLetters={userLetters} />
+          <ErrorLetters wordLetters={word} userLetters={userLetters} />
+          <form className="form" onSubmit={handleSubmit}>
+            <label className="title" htmlFor="last-letter">
               Escribe una letra:
             </label>
             <input
               autoFocus
-              autoComplete='off'
-              className='form__input'
-              maxLength='1'
-              type='text'
-              name='last-letter'
-              id='last-letter'
+              autoComplete="off"
+              className="form__input"
+              maxLength="1"
+              type="text"
+              name="last-letter"
+              id="last-letter"
               value={lastLetter}
               onKeyDown={handleKeyDown}
               onChange={handleChange}
             />
           </form>
         </section>
-       
-        <Dummy numberOfErrors = {getNumberOfErrors()}></Dummy>
-         
+
+        <Dummy numberOfErrors={getNumberOfErrors()}></Dummy>
       </main>
     </div>
   );
