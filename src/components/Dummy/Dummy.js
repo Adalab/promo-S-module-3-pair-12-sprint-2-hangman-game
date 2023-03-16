@@ -1,3 +1,5 @@
+import "../../styles/Dummy.scss";
+
 function Dummy({ numberOfErrors }) {
   return (
     <section className={"dummy error-" + numberOfErrors}>

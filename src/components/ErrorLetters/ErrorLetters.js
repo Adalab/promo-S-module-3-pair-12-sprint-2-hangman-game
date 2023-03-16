@@ -1,4 +1,4 @@
-function ErrorLetters(word, userLetters) {
+function ErrorLetters({word, userLetters}) {
   const renderErrorLetters = (word, userLetters) => {
     const errorLetters = userLetters.filter(
       (letter) =>

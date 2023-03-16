@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
+import {Route, Routes} from 'react-router-dom';
 
 // api
 import getWordFromApi from "../services/api";
-
+//components
 import Header from "../components/Header/Header.js";
 import Dummy from "../components/Dummy/Dummy.js";
 import SolutionLetters from "./SolutionLetters/SolutionLetters";
 import ErrorLetters from "./ErrorLetters/ErrorLetters";
+import Form from "./Form.js/Form";
+import Footer from "./Footer/Footer";
 
 // styles
 import "../styles/App.scss";
-import "../styles/Dummy.scss";
-import "../styles/Letters.scss";
 import "../styles/Form.scss";
-import "../styles/Header.scss";
+
+
+
 
 function App() {
   const [word, setWord] = useState("");
@@ -28,21 +31,6 @@ function App() {
 
   // events
 
-  const handleKeyDown = (ev) => {
-    // Sabrías decir para qué es esta línea
-    ev.target.setSelectionRange(0, 1);
-  };
-
-  const handleChange = (ev) => {
-    let re = /^[a-zA-ZñÑá-úÁ-Ú´]$/; //add regular pattern
-    if (re.test(ev.target.value) || ev.target.value === "") {
-      handleLastLetter(ev.target.value);
-    }
-  };
-
-  const handleSubmit = (ev) => {
-    ev.preventDefault();
-  };
 
   const getNumberOfErrors = () => {
     const errorLetters = userLetters.filter(
@@ -51,20 +39,8 @@ function App() {
     return errorLetters.length;
   };
 
-  const renderErrorLetters = () => {
-    const errorLetters = userLetters.filter(
-      (letter) =>
-        word.toLocaleLowerCase().includes(letter.toLocaleLowerCase()) === false
-    );
-    return errorLetters.map((letter, index) => {
-      return (
-        <li key={index} className="letter">
-          {letter}
-        </li>
-      );
-    });
-  };
-
+  
+  
   const handleLastLetter = (value) => {
     value = value.toLocaleLowerCase();
     setLastLetter(value);
@@ -80,29 +56,13 @@ function App() {
       <Header></Header>
       <main className="main">
         <section>
-          <SolutionLetters wordLetters={word} userLetters={userLetters} />
-          <ErrorLetters wordLetters={word} userLetters={userLetters} />
-          <form className="form" onSubmit={handleSubmit}>
-            <label className="title" htmlFor="last-letter">
-              Escribe una letra:
-            </label>
-            <input
-              autoFocus
-              autoComplete="off"
-              className="form__input"
-              maxLength="1"
-              type="text"
-              name="last-letter"
-              id="last-letter"
-              value={lastLetter}
-              onKeyDown={handleKeyDown}
-              onChange={handleChange}
-            />
-          </form>
+          <SolutionLetters word={word} userLetters={userLetters} />
+          <ErrorLetters word={word} userLetters={userLetters} />
+          <Form handleLastLetter={handleLastLetter} lastLetter={lastLetter}></Form>
         </section>
-
         <Dummy numberOfErrors={getNumberOfErrors()}></Dummy>
       </main>
+      <Footer></Footer>
     </div>
   );
 }
