@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Route, Routes} from 'react-router-dom';
+import { Route, Routes } from "react-router-dom";
 
 // api
 import getWordFromApi from "../services/api";
@@ -10,13 +10,12 @@ import SolutionLetters from "./SolutionLetters/SolutionLetters";
 import ErrorLetters from "./ErrorLetters/ErrorLetters";
 import Form from "./Form.js/Form";
 import Footer from "./Footer/Footer";
+import Instructions from "./Instructions";
+import Options from "./Options";
 
 // styles
 import "../styles/App.scss";
 import "../styles/Form.scss";
-
-
-
 
 function App() {
   const [word, setWord] = useState("");
@@ -31,7 +30,6 @@ function App() {
 
   // events
 
-
   const getNumberOfErrors = () => {
     const errorLetters = userLetters.filter(
       (letter) => word.includes(letter) === false
@@ -39,8 +37,6 @@ function App() {
     return errorLetters.length;
   };
 
-  
-  
   const handleLastLetter = (value) => {
     value = value.toLocaleLowerCase();
     setLastLetter(value);
@@ -55,13 +51,30 @@ function App() {
     <div className="page">
       <Header></Header>
       <main className="main">
-        <section>
-          <SolutionLetters word={word} userLetters={userLetters} />
-          <ErrorLetters word={word} userLetters={userLetters} />
-          <Form handleLastLetter={handleLastLetter} lastLetter={lastLetter}></Form>
-        </section>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <section>
+                <SolutionLetters word={word} userLetters={userLetters} />
+                <ErrorLetters word={word} userLetters={userLetters} />
+                <Form
+                  handleLastLetter={handleLastLetter}
+                  lastLetter={lastLetter}
+                ></Form>
+              </section>
+            }
+          ></Route>
+          <Route path="/options" element={<Options></Options>}></Route>
+          <Route
+            path="/instructions"
+            element={<Instructions></Instructions>}
+          ></Route>
+        </Routes>
+
         <Dummy numberOfErrors={getNumberOfErrors()}></Dummy>
       </main>
+
       <Footer></Footer>
     </div>
   );
